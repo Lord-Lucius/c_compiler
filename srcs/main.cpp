@@ -1,6 +1,19 @@
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
+
 #include "lexer/lexer.hpp"
 
-int main(void) {
-	return 0;
+int main(int ac, char *av[]) {
+	if (ac < 1) {
+		std::cout << "Usage: c_compile <file_to_compile>" << std::endl;
+		return (1);
+	}
+	std::ifstream readed_file(av[1]);
+	std::ostringstream oss;
+	oss << readed_file.rdbuf();
+	std::string code = oss.str();
+	tokenizer(code);
+	return (0);
 }

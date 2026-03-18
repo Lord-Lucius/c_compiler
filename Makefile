@@ -11,6 +11,10 @@ SOURCES = $(shell find $(SRC_DIR) -name "*.cpp")
 HEADERS = $(shell find $(INCLUDE_DIR) -name "*.hpp")
 OBJECTS = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
 
+# Compteur pour la barre de progression
+TOTAL_FILES = $(words $(OBJECTS))
+CURRENT_FILE = 0
+
 # Executable
 TARGET = c_compiler
 
@@ -18,14 +22,20 @@ TARGET = c_compiler
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	@echo "🔗 Linking..."
+	@$(CXX) $(CXXFLAGS) -o $@ $^
+	@echo "✅ Done! Executable: $(TARGET)"
 
 $(BUILD_DIR)/%.o: %.cpp $(HEADERS)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+	@$(eval CURRENT_FILE = $(shell expr $(CURRENT_FILE) + 1))
+	@printf "⏳ Compiling [%3d/%3d] %s\r" $(CURRENT_FILE) $(TOTAL_FILES) $(notdir $<)
+	@$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
 
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET)
+	@echo "🧹 Cleaning..."
+	@rm -rf $(BUILD_DIR) $(TARGET)
+	@echo "✅ Clean done!"
 
 re: clean all
 
