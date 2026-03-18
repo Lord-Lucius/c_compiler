@@ -25,6 +25,8 @@ $(TARGET): $(OBJECTS)
 	@echo "🔗 Linking..."
 	@$(CXX) $(CXXFLAGS) -o $@ $^
 	@echo "✅ Done! Executable: $(TARGET)"
+	@echo "==================================================="
+	@echo
 
 $(BUILD_DIR)/%.o: %.cpp $(HEADERS)
 	@mkdir -p $(dir $@)

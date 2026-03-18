@@ -11,9 +11,14 @@ int main(int ac, char *av[]) {
 		return (1);
 	}
 	std::ifstream readed_file(av[1]);
+	if (!readed_file.is_open()) {
+		std::cerr << "Error: File couldn't be opened or dont exist" << std::endl;
+		return (2);
+	}
 	std::ostringstream oss;
 	oss << readed_file.rdbuf();
 	std::string code = oss.str();
+	readed_file.close();
 	tokenizer(code);
 	return (0);
 }
