@@ -10,26 +10,23 @@ std::vector<std::string> split_string(const std::string &code) {
 
 	std::string::const_iterator it(code.begin());
 	std::string recomposed_word = "";
-	std::string special_character = "{}();";
+	std::string special_characters = "{}();";
 
 	while (it != code.end()) {
-		while (std::isspace(*it) || std::isblank(*it))
-			*it++;
-		if (special_character.find(*it) != std::string::npos) {
-			recomposed_word += *it;
-		}
-		else {
-			while (std::isalnum(*it)) {
-				recomposed_word += *it;
-				*it++;
-			}
-		}
-		if (!recomposed_word.empty()) {
-			std::cout << recomposed_word << std::endl;
-			words_vector.push_back(recomposed_word);
-		}
-		recomposed_word.clear();
+		while (std::isspace(*it))
+			it++;
+		recomposed_word += *it;
 		it++;
+		if (special_characters.find(*it) != std::string::npos || std::isspace(*it)) {
+			words_vector.push_back(recomposed_word);
+			recomposed_word.clear();
+			if (special_characters.find(*it) != std::string::npos) {
+				recomposed_word += *it;
+				words_vector.push_back(recomposed_word);
+				recomposed_word.clear();
+			}
+			it++;
+		}
 	}
 	return (words_vector);
 }
@@ -37,10 +34,14 @@ std::vector<std::string> split_string(const std::string &code) {
 std::vector<Token> tokenizer(const std::string &code) {
 	std::vector<Token> vector_token;
 	std::stringstream ss(code);
-	std::string word;
+	std::vector<std::string> word;
 
 	// str into words
-	split_string(code);
+	word = split_string(code);
+	std::cout << word.size() << std::endl;
+	for (size_t i = 0; i < word.size(); i++) {
+		std::cout << word[i] << std::endl;
+	}
 	// regex part
 	//std::regex identifier_pattern("^[a-zA-Z_]\\w*$");
 	//while (ss >> word) {
