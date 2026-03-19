@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/19 20:39:41 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/19 20:47:38 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ std::vector<Token> tokenizer(const std::string &code) {
 	std::vector<std::string> words_vector;
 
 	// Patterns
-	std::regex identifier_pattern("^[a-zA-Z_]\\w*$");
-	std::regex constant_pattern("[0-9]+$");
-	std::regex keyword_pattern("int|void|return"); // find out what to put here
+	std::regex keyword_pattern("^(int|float|if|while|for|return)$");
+	std::regex identifier_pattern("^[a-zA-Z_][a-zA-Z0-9_]*$");
+	std::regex constant_pattern("^[0-9]+(\\.[0-9]+)?$");
+	std::regex operator_pattern("^(\\+|-|\\*|/|=|==)$");
+	std::regex delimiter_pattern("^[\\{\\}\\[\\]\\(\\);]$");
 
 	// str into words
 	words_vector = split_string(code);
@@ -57,6 +59,12 @@ std::vector<Token> tokenizer(const std::string &code) {
 			vector_token.push_back(Token({w, "IDENTIFIER"}));
 		else if (std::regex_match(w, constant_pattern))
 			vector_token.push_back(Token({w, "CONSTANT"}));
+		else if (std::regex_match(w, operator_pattern))
+			vector_token.push_back(Token({w, "OPERATOR"}));
+		else if (std::regex_match(w, delimiter_pattern))
+			vector_token.push_back(Token({w, "DELIMITER"}));
+		else
+			vector_token.push_back(Token({w, "UNKNOWN"}));
 	}
 	return (vector_token);
 }
