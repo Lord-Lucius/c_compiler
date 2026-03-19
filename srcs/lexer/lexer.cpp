@@ -6,13 +6,14 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/19 15:11:29 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/19 20:34:17 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cctype>
 #include <regex>
-#include <sstream>
+#include <cctype>
+#include <string>
+#include <vector>
 #include <iostream>
 
 #include "lexer/lexer.hpp"
@@ -20,49 +21,39 @@
 std::vector<std::string> split_string(const std::string &code) {
 	std::vector<std::string> words_vector;
 
-	std::string::const_iterator it(code.begin());
 	std::string recomposed_word = "";
 	std::string special_characters = "{}();";
 
-	while (it != code.end()) {
-		while (std::isspace(*it))
-			it++;
-		recomposed_word += *it;
-		it++;
-		if (special_characters.find(*it) != std::string::npos || std::isspace(*it)) {
-			words_vector.push_back(recomposed_word);
-			recomposed_word.clear();
-			if (special_characters.find(*it) != std::string::npos) {
-				recomposed_word += *it;
+	for (char c : code) {
+		if (!std::isspace(c) && special_characters.find(c) == std::string::npos)
+			recomposed_word += c;
+		if (special_characters.find(c) != std::string::npos || std::isspace(c)) {
+			if (!recomposed_word.empty())
 				words_vector.push_back(recomposed_word);
-				recomposed_word.clear();
-			}
-			it++;
+			if (special_characters.find(c) != std::string::npos) 
+				words_vector.push_back(std::string(1, c));
+			recomposed_word.clear();
 		}
 	}
-	if (!recomposed_word.empty())
-		words_vector.push_back(recomposed_word);
 	return (words_vector);
 }
 
 std::vector<Token> tokenizer(const std::string &code) {
 	std::vector<Token> vector_token;
-	std::stringstream ss(code);
-	std::vector<std::string> word;
+	std::vector<std::string> words_vector;
+
+	// Patterns
+	std::regex identifier_pattern("^[a-zA-Z_]\\w*$");
+	std::regex constant_pattern("[0-9]+$");
 
 	// str into words
-	word = split_string(code);
-	std::cout << word.size() << std::endl;
-	for (size_t i = 0; i < word.size(); i++) {
-		std::cout << word[i] << std::endl;
+	words_vector = split_string(code);
+
+	for (std::string w : words_vector ) {
+		if (std::regex_match(w, identifier_pattern))
+			vector_token.push_back(Token({w, "IDENTIFIER"}));
+		else if (std::regex_match(w, constant_pattern))
+			vector_token.push_back(Token({w, "CONSTANT"}));
 	}
-	// regex part
-	//std::regex identifier_pattern("^[a-zA-Z_]\\w*$");
-	//while (ss >> word) {
-	//	//std::cout << i << ": " << word << std::endl;
-	//	if (std::regex_match(word, identifier_pattern)) {
-	//		std::cout << "In if condition: " << word << std::endl;
-	//	}
-	//}
 	return (vector_token);
 }
