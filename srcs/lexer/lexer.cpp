@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/19 15:05:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:11:29 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ std::vector<std::string> split_string(const std::string &code) {
 			it++;
 		}
 	}
+	if (!recomposed_word.empty())
+		words_vector.push_back(recomposed_word);
 	return (words_vector);
 }
 
