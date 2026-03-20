@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/20 09:57:25 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/20 11:10:11 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ std::vector<Token> tokenizer(const std::string &code) {
 		else if (std::regex_match(w, close_delimiter_pattern))
 			vector_token.push_back(Token({w, "CLOSE_DELIMITER"}));
 		else
-			vector_token.push_back(Token({w, "UNKNOWN"}));
+			throw CustomException::UnmatchedRegexPatternException();
 	}
 	return (vector_token);
 }
