@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/19 20:47:38 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/20 09:57:25 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 #include <cctype>
 #include <string>
 #include <vector>
-#include <iostream>
 
-#include "lexer/lexer.hpp"
+#include "main.hpp"
 
 std::vector<std::string> split_string(const std::string &code) {
 	std::vector<std::string> words_vector;
@@ -47,7 +46,8 @@ std::vector<Token> tokenizer(const std::string &code) {
 	std::regex identifier_pattern("^[a-zA-Z_][a-zA-Z0-9_]*$");
 	std::regex constant_pattern("^[0-9]+(\\.[0-9]+)?$");
 	std::regex operator_pattern("^(\\+|-|\\*|/|=|==)$");
-	std::regex delimiter_pattern("^[\\{\\}\\[\\]\\(\\);]$");
+	std::regex open_delimiter_pattern("[\\{\\[\\(]$");
+	std::regex close_delimiter_pattern("^[\\}\\]\\);]$");
 
 	// str into words
 	words_vector = split_string(code);
@@ -61,8 +61,10 @@ std::vector<Token> tokenizer(const std::string &code) {
 			vector_token.push_back(Token({w, "CONSTANT"}));
 		else if (std::regex_match(w, operator_pattern))
 			vector_token.push_back(Token({w, "OPERATOR"}));
-		else if (std::regex_match(w, delimiter_pattern))
-			vector_token.push_back(Token({w, "DELIMITER"}));
+		else if (std::regex_match(w, open_delimiter_pattern))
+			vector_token.push_back(Token({w, "OPEN_DELIMITER"}));
+		else if (std::regex_match(w, close_delimiter_pattern))
+			vector_token.push_back(Token({w, "CLOSE_DELIMITER"}));
 		else
 			vector_token.push_back(Token({w, "UNKNOWN"}));
 	}

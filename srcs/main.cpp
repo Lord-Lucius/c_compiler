@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/19 20:31:19 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/20 09:55:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <sstream>
 #include <string>
 
-#include "lexer/lexer.hpp"
+#include "main.hpp"
 
 int main(int ac, char *av[]) {
 	if (ac < 1) {
