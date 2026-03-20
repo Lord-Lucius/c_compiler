@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/20 11:10:11 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/20 16:23:17 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,16 @@ std::vector<std::string> split_string(const std::string &code) {
 
 	std::string recomposed_word = "";
 	std::string special_characters = "#<>{}();";
+	std::string unrecognized_characters = "@\\`";
 
 	for (char c : code) {
+		if (unrecognized_characters.find(c) != std::string::npos)
+			throw CustomException::UnrecognizedCharacterException();
 		if (!std::isspace(c) && special_characters.find(c) == std::string::npos)
 			recomposed_word += c;
 		if (special_characters.find(c) != std::string::npos || std::isspace(c)) {
+			if (recomposed_word.length() > 1 && std::isdigit(recomposed_word[0]) && std::isalpha(recomposed_word[1]))
+				throw CustomException::NoneAlphaCharacterException();
 			if (!recomposed_word.empty())
 				words_vector.push_back(recomposed_word);
 			if (special_characters.find(c) != std::string::npos) 
@@ -66,7 +71,7 @@ std::vector<Token> tokenizer(const std::string &code) {
 		else if (std::regex_match(w, close_delimiter_pattern))
 			vector_token.push_back(Token({w, "CLOSE_DELIMITER"}));
 		else
-			throw CustomException::UnmatchedRegexPatternException();
+			vector_token.push_back(Token({w, "UNKNOWN"}));
 	}
 	return (vector_token);
 }

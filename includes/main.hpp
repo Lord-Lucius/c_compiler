@@ -6,32 +6,37 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/20 11:17:12 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/20 16:14:22 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <exception>
-#include <vector>
 #include <string>
+#include <vector>
 
 /* SECTION Lexer Part */
 struct Token {
-	std::string value;
-	std::string type;
+		std::string value;
+		std::string type;
 };
 
 std::vector<Token> tokenizer(const std::string &code);
 
 class CustomException {
 	public:
-		class UnmatchedRegexPatternException : public std::exception {
-			const char *what() const noexcept {
-				return ("Error: the word didn't match any regex pattern");
-			}
+		class NoneAlphaCharacterException : public std::exception {
+				const char *what() const noexcept {
+					return "Error: First character is not alpha";
+				}
+		};
+
+		class UnrecognizedCharacterException : public std::exception {
+				const char *what() const noexcept {
+					return "Error: Unrecognized character";
+				}
 		};
 };
-
 
 /* !SECTION */
