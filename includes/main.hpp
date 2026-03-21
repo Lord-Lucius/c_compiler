@@ -6,24 +6,17 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/20 16:14:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/21 12:03:19 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <exception>
 #include <string>
 #include <vector>
+#include <exception>
 
-/* SECTION Lexer Part */
-struct Token {
-		std::string value;
-		std::string type;
-};
-
-std::vector<Token> tokenizer(const std::string &code);
-
+#pragma region Exception
 class CustomException {
 	public:
 		class NoneAlphaCharacterException : public std::exception {
@@ -38,5 +31,17 @@ class CustomException {
 				}
 		};
 };
+#pragma endregion
 
-/* !SECTION */
+#pragma region Lexer
+struct Token {
+		std::string value;
+		std::string type;
+};
+
+std::vector<Token> tokenizer(const std::string &code);
+#pragma endregion
+
+#pragma region Parser
+
+#pragma endregion
