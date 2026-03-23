@@ -6,11 +6,12 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/23 21:26:09 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/23 23:04:20 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fstream>
+#include <ios>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -37,16 +38,18 @@ int main(int ac, char *av[]) {
 		return (2);
 	}
 
-	std::ostringstream oss;
-	oss << readed_file.rdbuf();
-	std::string code = oss.str();
-	readed_file.close();
-
 	try {
+		std::ostringstream oss;
+		oss << readed_file.rdbuf();
+		std::string code = oss.str();
+		readed_file.close();
+
 		std::vector<Token> token_vector = tokenizer(code);
 		for (Token t : token_vector) {
 			std::cout << t.value << "::" << t.type << std::endl;
 		}
+	} catch (std::ios::failure) {
+		std::cout << "Error: ios error" << std::endl;
 	} catch (UnrecognizedCharacterException &u) {
 		std::cout << u.what() << std::endl;
 	} catch (NoneAlphaCharacterException &n) {
