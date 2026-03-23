@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/20 16:15:30 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/23 21:26:09 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,17 @@ int main(int ac, char *av[]) {
 	std::string code = oss.str();
 	readed_file.close();
 
-	std::vector<Token> token_vector = tokenizer(code);
-	for (Token t : token_vector) {
-		std::cout << t.value << "::" << t.type << std::endl;
+	try {
+		std::vector<Token> token_vector = tokenizer(code);
+		for (Token t : token_vector) {
+			std::cout << t.value << "::" << t.type << std::endl;
+		}
+	} catch (UnrecognizedCharacterException &u) {
+		std::cout << u.what() << std::endl;
+	} catch (NoneAlphaCharacterException &n) {
+		std::cout << n.what() << std::endl;
+	} catch (...) {
+		std::cout << "Error: Unknown error occured" << std::endl;
 	}
 	return (0);
 }

@@ -6,12 +6,12 @@
 #    By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/03/19 11:15:58 by lucius            #+#    #+#              #
-#    Updated: 2026/03/19 15:05:47 by luluzuri         ###   ########.fr        #
+#    Updated: 2026/03/23 20:57:50 by luluzuri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX = clang++
-CXXFLAGS = -std=c++23 -Wall -Wextra -g
+CXXFLAGS = -std=c++17 -Wall -Wextra -g
 
 # Répertoires
 INCLUDE_DIR = includes
