@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/21 12:03:19 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/21 19:30:26 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,9 @@ std::vector<Token> tokenizer(const std::string &code);
 #pragma endregion
 
 #pragma region Parser
+struct AST {
+	
+};
 
+void Parser(void);
 #pragma endregion
