@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 16:25:57 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 17:15:05 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,11 @@ class Function {
 		std::unique_ptr<Expression> _body;
 	public:
 		Function(std::unique_ptr<Expression> &body) : _body(std::move(body)) {};
+};
+
+class Program {
+	private:
+		std::vector<Function> _body;
 };
 
 class Parser {
