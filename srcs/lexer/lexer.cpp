@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   NewLexer.cpp                                       :+:      :+:    :+:   */
+/*   lexer.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:49:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 22:32:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:36:30 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ Token *Lexer::tokenizeINT(void) {
 Token *Lexer::tokenizeSPECIAL(enum type TYPE) {
 	Token *newToken = new Token();
 	newToken->TYPE = TYPE;
-	newToken->value = advance_cursor();
+	newToken->value = std::string(1, advance_cursor());
 
 	return (newToken);
 }
