@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:49:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 22:36:30 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:46:21 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,38 +81,38 @@ Token *Lexer::tokenizeSPECIAL(enum type TYPE) {
 	return (newToken);
 }
 
-void Lexer::handleSpecials(void) {
+bool Lexer::handleSpecials(void) {
 	switch (_current) {
 		case ';': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_SEMICOLON));
-			break;
+			return (true);
 		}
 		case '(': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_LEFT_PARENTHESE));
-			break;
+			return (true);
 		}
 		case ')': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_RIGHT_PARENTHESE));
-			break;
+			return (true);
 		}
 		case '{': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_LEFT_BRACKET));
-			break;
+			return (true);
 		}
 		case '}': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_RIGHT_BRACKET));
-			break;
+			return (true);
 		}
 		case '[': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_LEFT_CROCHET));
-			break;
+			return (true);
 		}
 		case ']': {
 			_tokens.push_back(tokenizeSPECIAL(TOKEN_RIGHT_CROCHET));
-			break;
+			return (true);
 		}
 		default:
-			throw UnrecognizedCharacterException();
+			return (false);
 	}
 }
 
@@ -123,14 +123,14 @@ std::vector<Token *> Lexer::tokenize() {
 		if (std::isalpha(_current) || _current == '_') {
 			_tokens.push_back(tokenizeID());
 			continue;
-		}
-
-		if (std::isdigit(_current)) {
+		} else if (std::isdigit(_current)) {
 			_tokens.push_back(tokenizeINT());
 			continue;
+		} else if (handleSpecials()) {
+			continue;
+		} else {
+			throw UnrecognizedCharacterException();
 		}
-
-		handleSpecials();
 	}
 	return (_tokens);
 }

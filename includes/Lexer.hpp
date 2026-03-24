@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:51:48 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 22:13:37 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:45:00 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ class Lexer {
 		Token *tokenizeID(void);
 		Token *tokenizeINT(void);
 		Token *tokenizeSPECIAL(enum type);
-		void handleSpecials(void);
+		bool handleSpecials(void);
 		std::vector<Token *> tokenize(void);
 
 		// Exception
