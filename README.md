@@ -31,7 +31,7 @@ This project implements a **complete C compiler** following the principles outli
 ## 🏗️ Compiler Phases
 
 ### Phase 1️⃣: **Lexical Analysis (Lexer)**
-Converts raw source code into tokens.
+Converts raw source code into _tokens.
 
 ```
 Input:  int main() { return 42; }
@@ -46,10 +46,10 @@ Output: [INT] [IDENT:main] [LPAREN] [RPAREN] [LBRACE]
 - Keyword recognition
 
 ### Phase 2️⃣: **Syntax Analysis (Parser)**
-Builds an Abstract Syntax Tree (AST) from tokens.
+Builds an Abstract Syntax Tree (AST) from _tokens.
 
 ```
-Tokens → Parser → AST
+_tokens → Parser → AST
          ↓
     Grammar Rules
     Recursive Descent

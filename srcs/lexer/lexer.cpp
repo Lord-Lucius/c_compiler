@@ -1,81 +1,136 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.cpp                                          :+:      :+:    :+:   */
+/*   NewLexer.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/24 15:39:30 by luluzuri         ###   ########.fr       */
+/*   Created: 2026/03/24 18:49:31 by luluzuri          #+#    #+#             */
+/*   Updated: 2026/03/24 22:32:20 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Lexer.hpp"
+#include <iostream>
 #include <cctype>
-#include <regex>
-#include <string>
-#include <vector>
+#include <sstream>
 
-#include "main.hpp"
+Lexer::Lexer(std::string &sourceCode) {
+	_source = sourceCode;
+	_cursor = 0;
+	_size = sourceCode.length();
+	_current = sourceCode.at(_cursor);
+}
 
-std::vector<std::string> Lexer::split_string(const std::string &code) {
+char Lexer::advance_cursor(void) {
+	if (_cursor < _size) {
+		char tmp = _current;
+		_cursor++;
+		_current = (_cursor < _size) ? _source[_cursor] : '\0';
+		return (tmp);
+	}
+	return ('\0');
+}
 
-	std::string recomposed_word = "";
-	std::string special_characters = "#<>{}();";
-	std::string unrecognized_characters = "@\\`";
+char Lexer::peak(int offset) {
+	if (_cursor + offset < _size)
+		return (_source[_cursor + offset]);
+	else
+		return ('\0');
+}
 
-	for (char c : code) {
-		if (unrecognized_characters.find(c) != std::string::npos)
-			throw UnrecognizedCharacterException();
-		if (!std::isspace(c) && special_characters.find(c) == std::string::npos)
-			recomposed_word += c;
-		if (special_characters.find(c) != std::string::npos ||
-			std::isspace(c)) {
-			if (recomposed_word.length() > 1 &&
-				std::isdigit(recomposed_word[0]) &&
-				std::isalpha(recomposed_word[1]))
-				throw NoneAlphaCharacterException();
-			if (!recomposed_word.empty())
-				_wordsOutOfCode.push_back(recomposed_word);
-			if (special_characters.find(c) != std::string::npos)
-				_wordsOutOfCode.push_back(std::string(1, c));
-			recomposed_word.clear();
+void Lexer::checkAndSkip(void) {
+	while (std::isspace(_current))
+		advance_cursor();
+}
+
+Token *Lexer::tokenizeID(void) {
+	std::stringstream buffer;
+
+	buffer << advance_cursor();
+
+	while (std::isalnum(_current) || _current == '_') {
+		buffer << advance_cursor();
+	}
+
+	Token *new_token = new Token();
+
+	new_token->TYPE = TOKEN_ID;
+	new_token->value = buffer.str();
+	return (new_token);
+}
+
+Token *Lexer::tokenizeINT(void) {
+	std::stringstream buffer;
+
+	while (std::isdigit(_current)) {
+		buffer << advance_cursor();
+	}
+	Token *newToken = new Token();
+	newToken->TYPE = TOKEN_INT;
+	newToken->value = buffer.str();
+
+	return (newToken);
+}
+
+Token *Lexer::tokenizeSPECIAL(enum type TYPE) {
+	Token *newToken = new Token();
+	newToken->TYPE = TYPE;
+	newToken->value = advance_cursor();
+
+	return (newToken);
+}
+
+void Lexer::handleSpecials(void) {
+	switch (_current) {
+		case ';': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_SEMICOLON));
+			break;
 		}
-	}
-	return (_wordsOutOfCode);
-}
-
-Lexer::Lexer(const std::string &code) {
-	// Patterns
-	std::regex keyword_pattern("^(int|float|if|while|for|return)$");
-	std::regex identifier_pattern(
-		"^[a-zA-Z_][a-zA-Z0-9_]*$"); // means name ( identify the function )
-	std::regex constant_pattern("^[0-9]+(\\.[0-9]+)?$");
-	std::regex operator_pattern("^(\\+|-|\\*|/|=|==)$");
-	std::regex open_delimiter_pattern("[\\{\\[\\(]$");
-	std::regex close_delimiter_pattern("^[\\}\\]\\)]$");
-	std::regex semicolon_pattern(";$");
-
-	// str into words
-	split_string(code);
-
-	for (std::string w : _wordsOutOfCode) {
-		if (std::regex_match(w, keyword_pattern))
-			_tokens.push_back(Token({w, "KEYWORD"}));
-		else if (std::regex_match(w, identifier_pattern))
-			_tokens.push_back(Token({w, "IDENTIFIER"}));
-		else if (std::regex_match(w, constant_pattern))
-			_tokens.push_back(Token({w, "CONSTANT"}));
-		else if (std::regex_match(w, operator_pattern))
-			_tokens.push_back(Token({w, "OPERATOR"}));
-		else if (std::regex_match(w, open_delimiter_pattern))
-			_tokens.push_back(Token({w, "OPEN_DELIMITER"}));
-		else if (std::regex_match(w, close_delimiter_pattern))
-			_tokens.push_back(Token({w, "CLOSE_DELIMITER"}));
-		else if (std::regex_match(w, semicolon_pattern))
-			_tokens.push_back(Token({w, "SEMICOLON"}));
-		else
-			_tokens.push_back(Token({w, "UNKNOWN"}));
+		case '(': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_LEFT_PARENTHESE));
+			break;
+		}
+		case ')': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_RIGHT_PARENTHESE));
+			break;
+		}
+		case '{': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_LEFT_BRACKET));
+			break;
+		}
+		case '}': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_RIGHT_BRACKET));
+			break;
+		}
+		case '[': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_LEFT_CROCHET));
+			break;
+		}
+		case ']': {
+			_tokens.push_back(tokenizeSPECIAL(TOKEN_RIGHT_CROCHET));
+			break;
+		}
+		default:
+			throw UnrecognizedCharacterException();
 	}
 }
 
-std::vector<Token> Lexer::getTokenVector(void) { return _tokens; }
+std::vector<Token *> Lexer::tokenize() {
+	bool notEof = true;
+	while (_cursor < _size && notEof) {
+		checkAndSkip();
+		if (std::isalpha(_current) || _current == '_') {
+			_tokens.push_back(tokenizeID());
+			continue;
+		}
+
+		if (std::isdigit(_current)) {
+			_tokens.push_back(tokenizeINT());
+			continue;
+		}
+
+		handleSpecials();
+	}
+	return (_tokens);
+}
