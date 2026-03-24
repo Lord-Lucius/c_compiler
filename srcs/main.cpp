@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/24 11:37:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 11:38:35 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,11 @@ int main(int ac, char *av[]) {
 		return (2);
 	}
 
-	std::ostringstream oss;
-	oss << readed_file.rdbuf();
-	std::string code = oss.str();
-	readed_file.close();
 	try {
-
+		std::ostringstream oss;
+		oss << readed_file.rdbuf();
+		std::string code = oss.str();
+		readed_file.close();
 
 		std::vector<Token> token_vector = tokenizer(code);
 		for (Token t : token_vector) {
