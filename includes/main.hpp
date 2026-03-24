@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/23 21:14:24 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:24:03 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,6 @@ class CustomException : public std::exception {
 
 		const char *what() const noexcept override { return _message.c_str(); }
 };
-
-class NoneAlphaCharacterException : public CustomException {
-	public:
-		NoneAlphaCharacterException()
-			: CustomException("First character is not alpha") {}
-};
-
-class UnrecognizedCharacterException : public CustomException {
-	public:
-		UnrecognizedCharacterException()
-			: CustomException("Unrecognized character") {}
-};
 #pragma endregion
 
 #pragma region Lexer
@@ -46,7 +34,32 @@ struct Token {
 		std::string type;
 };
 
-std::vector<Token> tokenizer(const std::string &code);
+class Lexer {
+	private:
+		std::vector<Token> _tokens;
+		std::vector<std::string> _words;
+		std::vector<std::string> split_string(const std::string &code);
+
+	public:
+		Lexer(const std::string &code);
+		~Lexer(void);
+
+		// Utils
+		std::vector<Token> getWordsVector();
+
+		// Exception
+		class NoneAlphaCharacterException : public CustomException {
+			public:
+				NoneAlphaCharacterException()
+					: CustomException("First character is not alpha") {}
+		};
+
+		class UnrecognizedCharacterException : public CustomException {
+			public:
+				UnrecognizedCharacterException()
+					: CustomException("Unrecognized character") {}
+		};
+};
 #pragma endregion
 
 #pragma region Parser

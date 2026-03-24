@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Lexer.cpp                                          :+:      :+:    :+:   */
+/*   lexer.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/23 22:21:20 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:24:03 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <regex>
 #include <cctype>
+#include <regex>
 #include <string>
 #include <vector>
 
 #include "main.hpp"
 
-std::vector<std::string> split_string(const std::string &code) {
-	std::vector<std::string> words_vector;
+std::vector<std::string> Lexer::split_string(const std::string &code) {
 
 	std::string recomposed_word = "";
 	std::string special_characters = "#<>{}();";
@@ -29,26 +28,27 @@ std::vector<std::string> split_string(const std::string &code) {
 			throw UnrecognizedCharacterException();
 		if (!std::isspace(c) && special_characters.find(c) == std::string::npos)
 			recomposed_word += c;
-		if (special_characters.find(c) != std::string::npos || std::isspace(c)) {
-			if (recomposed_word.length() > 1 && std::isdigit(recomposed_word[0]) && std::isalpha(recomposed_word[1]))
+		if (special_characters.find(c) != std::string::npos ||
+			std::isspace(c)) {
+			if (recomposed_word.length() > 1 &&
+				std::isdigit(recomposed_word[0]) &&
+				std::isalpha(recomposed_word[1]))
 				throw NoneAlphaCharacterException();
 			if (!recomposed_word.empty())
-				words_vector.push_back(recomposed_word);
+				_words.push_back(recomposed_word);
 			if (special_characters.find(c) != std::string::npos)
-				words_vector.push_back(std::string(1, c));
+				_words.push_back(std::string(1, c));
 			recomposed_word.clear();
 		}
 	}
-	return (words_vector);
+	return (_words);
 }
 
-std::vector<Token> tokenizer(const std::string &code) {
-	std::vector<Token> vector_token;
-	std::vector<std::string> words_vector;
-
+Lexer::Lexer(const std::string &code) {
 	// Patterns
 	std::regex keyword_pattern("^(int|float|if|while|for|return)$");
-	std::regex identifier_pattern("^[a-zA-Z_][a-zA-Z0-9_]*$"); // means name ( identify the function )
+	std::regex identifier_pattern(
+		"^[a-zA-Z_][a-zA-Z0-9_]*$"); // means name ( identify the function )
 	std::regex constant_pattern("^[0-9]+(\\.[0-9]+)?$");
 	std::regex operator_pattern("^(\\+|-|\\*|/|=|==)$");
 	std::regex open_delimiter_pattern("[\\{\\[\\(]$");
@@ -56,25 +56,26 @@ std::vector<Token> tokenizer(const std::string &code) {
 	std::regex semicolon_pattern(";$");
 
 	// str into words
-	words_vector = split_string(code);
+	split_string(code);
 
-	for (std::string w : words_vector ) {
+	for (std::string w : _words) {
 		if (std::regex_match(w, keyword_pattern))
-			vector_token.push_back(Token({w, "KEYWORD"}));
+			_tokens.push_back(Token({w, "KEYWORD"}));
 		else if (std::regex_match(w, identifier_pattern))
-			vector_token.push_back(Token({w, "IDENTIFIER"}));
+			_tokens.push_back(Token({w, "IDENTIFIER"}));
 		else if (std::regex_match(w, constant_pattern))
-			vector_token.push_back(Token({w, "CONSTANT"}));
+			_tokens.push_back(Token({w, "CONSTANT"}));
 		else if (std::regex_match(w, operator_pattern))
-			vector_token.push_back(Token({w, "OPERATOR"}));
+			_tokens.push_back(Token({w, "OPERATOR"}));
 		else if (std::regex_match(w, open_delimiter_pattern))
-			vector_token.push_back(Token({w, "OPEN_DELIMITER"}));
+			_tokens.push_back(Token({w, "OPEN_DELIMITER"}));
 		else if (std::regex_match(w, close_delimiter_pattern))
-			vector_token.push_back(Token({w, "CLOSE_DELIMITER"}));
+			_tokens.push_back(Token({w, "CLOSE_DELIMITER"}));
 		else if (std::regex_match(w, semicolon_pattern))
-			vector_token.push_back(Token({w, "SEMICOLON"}));
+			_tokens.push_back(Token({w, "SEMICOLON"}));
 		else
-			vector_token.push_back(Token({w, "UNKNOWN"}));
+			_tokens.push_back(Token({w, "UNKNOWN"}));
 	}
-	return (vector_token);
 }
+
+std::vector<Token> Lexer::getWordsVector(void) { return _tokens; }
