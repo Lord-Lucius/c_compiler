@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/24 15:24:03 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:39:30 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int main(int ac, char *av[]) {
 		std::string code = oss.str();
 		readed_file.close();
 
-		std::vector<Token> token_vector = Lexer(code).getWordsVector();
+		std::vector<Token> token_vector = Lexer(code).getTokenVector();
 		for (Token t : token_vector) {
 			std::cout << t.value << "::" << t.type << std::endl;
 		}

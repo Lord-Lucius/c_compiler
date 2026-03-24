@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 15:24:03 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:39:30 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ struct Token {
 class Lexer {
 	private:
 		std::vector<Token> _tokens;
-		std::vector<std::string> _words;
+		std::vector<std::string> _wordsOutOfCode;
 		std::vector<std::string> split_string(const std::string &code);
 
 	public:
@@ -45,7 +45,7 @@ class Lexer {
 		~Lexer(void);
 
 		// Utils
-		std::vector<Token> getWordsVector();
+		std::vector<Token> getTokenVector();
 
 		// Exception
 		class NoneAlphaCharacterException : public CustomException {
@@ -64,6 +64,14 @@ class Lexer {
 
 #pragma region Parser
 struct AST {};
+
+class Parser {
+	private:
+	protected:
+	public:
+		Parser(std::vector<Token> &tokens);
+		~Parser(void);
+};
 
 void Parser(void);
 #pragma endregion

@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:46 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/24 15:24:03 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 15:39:30 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ std::vector<std::string> Lexer::split_string(const std::string &code) {
 				std::isalpha(recomposed_word[1]))
 				throw NoneAlphaCharacterException();
 			if (!recomposed_word.empty())
-				_words.push_back(recomposed_word);
+				_wordsOutOfCode.push_back(recomposed_word);
 			if (special_characters.find(c) != std::string::npos)
-				_words.push_back(std::string(1, c));
+				_wordsOutOfCode.push_back(std::string(1, c));
 			recomposed_word.clear();
 		}
 	}
-	return (_words);
+	return (_wordsOutOfCode);
 }
 
 Lexer::Lexer(const std::string &code) {
@@ -58,7 +58,7 @@ Lexer::Lexer(const std::string &code) {
 	// str into words
 	split_string(code);
 
-	for (std::string w : _words) {
+	for (std::string w : _wordsOutOfCode) {
 		if (std::regex_match(w, keyword_pattern))
 			_tokens.push_back(Token({w, "KEYWORD"}));
 		else if (std::regex_match(w, identifier_pattern))
@@ -78,4 +78,4 @@ Lexer::Lexer(const std::string &code) {
 	}
 }
 
-std::vector<Token> Lexer::getWordsVector(void) { return _tokens; }
+std::vector<Token> Lexer::getTokenVector(void) { return _tokens; }
