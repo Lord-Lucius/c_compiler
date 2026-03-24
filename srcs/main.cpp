@@ -6,16 +6,17 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/23 21:26:09 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 22:51:51 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fstream>
+#include <ios>
 #include <iostream>
 #include <sstream>
 #include <string>
 
-#include "main.hpp"
+#include "Lexer.hpp"
 
 int main(int ac, char *av[]) {
 	if (ac < 2) {
@@ -27,32 +28,42 @@ int main(int ac, char *av[]) {
 		std::string arg = av[i];
 		if (arg[0] != '-') {
 			file_name = arg;
-			break ;
+			break;
 		}
 	}
 
 	std::ifstream readed_file(file_name);
 	if (!readed_file.is_open()) {
-		std::cerr << "Error: File couldn't be opened or dont exist ( " << file_name << " )" << std::endl;
+		std::cerr << "Error: File couldn't be opened or dont exist ( "
+				  << file_name << " )" << std::endl;
 		return (2);
 	}
 
-	std::ostringstream oss;
-	oss << readed_file.rdbuf();
-	std::string code = oss.str();
-	readed_file.close();
-
 	try {
-		std::vector<Token> token_vector = tokenizer(code);
-		for (Token t : token_vector) {
-			std::cout << t.value << "::" << t.type << std::endl;
+		std::ostringstream oss;
+		oss << readed_file.rdbuf();
+		std::string sourceCode = oss.str();
+		readed_file.close();
+
+		Lexer lexer(sourceCode);
+		std::vector<Token *> tokens = lexer.tokenize();
+		for (Token *t : tokens) {
+			std::cout << t->TYPE << " :: " << t->value << std::endl;
 		}
-	} catch (UnrecognizedCharacterException &u) {
+		for (Token *t : tokens)
+			delete t;
+	} catch (std::ios::failure) {
+		std::cout << "Error: ios error" << std::endl;
+		return (1);
+	} catch (Lexer::UnrecognizedCharacterException &u) {
 		std::cout << u.what() << std::endl;
-	} catch (NoneAlphaCharacterException &n) {
+		return (2);
+	} catch (Lexer::NoneAlphaCharacterException &n) {
 		std::cout << n.what() << std::endl;
+		return (3);
 	} catch (...) {
 		std::cout << "Error: Unknown error occured" << std::endl;
+		return (4);
 	}
 	return (0);
 }
