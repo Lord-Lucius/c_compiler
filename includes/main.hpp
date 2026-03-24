@@ -6,14 +6,16 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 15:39:30 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/24 16:25:57 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <exception>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #pragma region Exception
@@ -63,7 +65,24 @@ class Lexer {
 #pragma endregion
 
 #pragma region Parser
-struct AST {};
+class Expression {
+	public:
+		virtual ~Expression() = default;
+};
+
+class NumberExpression : public Expression {
+	private:
+		int _value;
+	public:
+		NumberExpression(int &val): _value(val) {}
+};
+
+class Function {
+	private:
+		std::unique_ptr<Expression> _body;
+	public:
+		Function(std::unique_ptr<Expression> &body) : _body(std::move(body)) {};
+};
 
 class Parser {
 	private:
