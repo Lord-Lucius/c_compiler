@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:49:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/24 22:46:21 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/25 17:00:35 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,5 +132,9 @@ std::vector<Token *> Lexer::tokenize() {
 			throw UnrecognizedCharacterException();
 		}
 	}
+	return (_tokens);
+}
+
+std::vector<Token *> Lexer::getTokens(void) {
 	return (_tokens);
 }
