@@ -6,12 +6,11 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:49:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/25 17:00:35 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/25 17:09:48 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Lexer.hpp"
-#include <iostream>
 #include <cctype>
 #include <sstream>
 
