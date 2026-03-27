@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/24 22:51:51 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/27 17:28:15 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <string>
 
 #include "Lexer.hpp"
+#include "Parser.hpp"
 
 int main(int ac, char *av[]) {
 	if (ac < 2) {
@@ -46,10 +47,15 @@ int main(int ac, char *av[]) {
 		readed_file.close();
 
 		Lexer lexer(sourceCode);
+		Parser parser = Parser();
 		std::vector<Token *> tokens = lexer.tokenize();
 		for (Token *t : tokens) {
 			std::cout << t->TYPE << " :: " << t->value << std::endl;
 		}
+
+		// Parsing part
+		Program *program = parser.parse(tokens);
+
 		for (Token *t : tokens)
 			delete t;
 	} catch (std::ios::failure) {
