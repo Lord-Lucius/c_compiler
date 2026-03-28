@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 17:10:37 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/27 17:25:29 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/28 16:58:24 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,17 @@ class Program {
 // Parser
 class Parser {
 	private:
-		std::vector<Token *> _token;
+		std::vector<Token *> _tokens;
 		int _current = 0;
 
 		Token *peak(void);
 		Token *advance(void);
+		Token *previous(void);
 		bool match(enum type type);
 
 		bool check(enum type type);
 		void except(enum type type, const std::string &message);
+		bool isAtEnd(void);
 
 	public:
 		Program *parse(std::vector<Token *> &tokens);
