@@ -21,3 +21,17 @@ bool Parser::match(enum type type) {
 	return ((type == _tokens[_current]->TYPE) ? true : false);
 }
 
+bool Parser::check(enum type type) {
+	int tmp = _current;
+	_current++;
+	return (match(type));
+}
+
+void Parser::except(enum type type, const std::string &message) {
+	if (check(type))
+		throw UnMatchedTypeException(message);
+}
+
+bool Parser::isAtEnd(void) {
+	return (_current == _tokens.size());
+}

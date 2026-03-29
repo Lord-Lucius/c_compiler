@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 17:10:37 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/28 16:58:24 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/29 20:16:08 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,15 @@ class Function {
 		std::string _name;
 		std::string _return_type;
 		std::vector<Statement *> _body;
+	public:
+		
 };
 
 class Program {
 	private:
 		std::vector<Function *> _functions;
+	public:
+		void parseProgram(std::vector<Token *> tokens);
 };
 
 
@@ -91,4 +95,10 @@ class Parser {
 
 	public:
 		Program *parse(std::vector<Token *> &tokens);
+	
+		// Exceptions
+		class UnMatchedTypeException : public CustomException {
+			public:
+				UnMatchedTypeException(const std::string &msg) : CustomException(msg) {}
+		};
 };
