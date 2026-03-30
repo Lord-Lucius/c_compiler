@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 17:10:37 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/29 20:16:08 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:14:07 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,29 @@ class BinOp : public Expression {
 		Expression *_left;
 		std::string _op;
 		Expression *_right;
+	public:
+		BinOp *parseBinOp(std::vector<Token *> tokens);
 };
 
 class Constant : public Expression {
 	private:
 		int _value;
+	public:
+		Constant *parseConstant(std::vector<Token *> tokens);
 };
 
 class Return : public Statement {
-	Expression *_value;
+	public:
+		Expression *_value;
+	private:
+		Return *parseReturn(std::vector<Token *> tokens);
 };
 
 class Block : public Statement {
 	private:
 		std::vector<Statement *> _functions;
+	public:
+		Block *parseBlock(std::vector<Token *> tokens);
 };
 
 class Function {
@@ -67,14 +76,14 @@ class Function {
 		std::string _return_type;
 		std::vector<Statement *> _body;
 	public:
-		
+		Function *parseFunction(std::vector<Token *> tokens);
 };
 
 class Program {
 	private:
 		std::vector<Function *> _functions;
 	public:
-		void parseProgram(std::vector<Token *> tokens);
+		Program *parseProgram(std::vector<Token *> tokens);
 };
 
 
@@ -100,5 +109,10 @@ class Parser {
 		class UnMatchedTypeException : public CustomException {
 			public:
 				UnMatchedTypeException(const std::string &msg) : CustomException(msg) {}
+		};
+
+		class EmptyBodyNotAllowedException : public CustomException {
+			public:
+				EmptyBodyNotAllowedException() : CustomException("Error: An empty body is not allowed.") { }
 		};
 };

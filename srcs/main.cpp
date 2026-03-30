@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/28 14:00:38 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:16:25 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,9 @@ int main(int ac, char *av[]) {
 	} catch (std::ios::failure) {
 		std::cout << "Error: ios error" << std::endl;
 		return (1);
-	} catch (Lexer::UnrecognizedCharacterException &u) {
+	} catch (CustomException &u) {
 		std::cout << u.what() << std::endl;
 		return (2);
-	} catch (Lexer::NoneAlphaCharacterException &n) {
-		std::cout << n.what() << std::endl;
-		return (3);
 	} catch (...) {
 		std::cout << "Error: Unknown error occured" << std::endl;
 		return (4);

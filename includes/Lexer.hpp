@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:51:48 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/25 17:00:05 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:20:40 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class Lexer {
 		Token *tokenizeSPECIAL(enum type);
 		bool handleSpecials(void);
 		std::vector<Token *> tokenize(void);
+		void freeTokens(void);
 
 		// GETTER / SETTER
 		std::vector<Token *> getTokens(void);

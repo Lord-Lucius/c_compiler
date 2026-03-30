@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 09:53:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/25 16:59:07 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/30 12:20:15 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,5 @@ class CustomException : public std::exception {
 #pragma endregion
 
 #pragma region UtilFunctions
-
-
 
 #pragma endregion
