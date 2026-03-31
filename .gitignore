@@ -1,47 +1,27 @@
-# Prerequisites
-*.d
+# Build directory
+build/
 
-# Compiled Object files
-*.slo
-*.lo
+# Object files
 *.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
-*.lib
+*.so
 
-# Executables
-*.exe
-*.out
-*.app
-
-# debug information files
-*.dwo
-
-# others 
-.clangd
+# Executable
 c_compiler
-build
-writing-a-c-compiler-tests
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+# IDE
+.vscode/
+.clangd
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Tests (pas versionnés)
+writing-a-c-compiler-tests/
