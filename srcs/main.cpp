@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/30 12:16:25 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/03/31 22:58:19 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,17 @@ int main(int ac, char *av[]) {
 		readed_file.close();
 
 		Lexer lexer(sourceCode);
-		Parser parser = Parser();
 		std::vector<Token *> tokens = lexer.tokenize();
 		for (Token *t : tokens) {
 			std::cout << t->TYPE << " :: " << t->value << std::endl;
 		}
+		Parser parser = Parser(tokens);
 
 		// Parsing part
-		Program *program = parser.parse(tokens);
+		Program *program = parser.parse();
 
 		for (Token *t : tokens)
 			delete t;
-		delete program;
 	} catch (std::ios::failure) {
 		std::cout << "Error: ios error" << std::endl;
 		return (1);
