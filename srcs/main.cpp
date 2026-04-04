@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/03/24 22:51:51 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/04/02 00:34:22 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,19 @@ int main(int ac, char *av[]) {
 		readed_file.close();
 
 		Lexer lexer(sourceCode);
-		std::vector<Token *> tokens = lexer.tokenize();
+		std::vector<Token *> &tokens = lexer.tokenize();
+
+		std::cout << tokens.size() << std::endl;
 		for (Token *t : tokens) {
-			std::cout << t->TYPE << " :: " << t->value << std::endl;
+			std::cout << tokenTypeToString(t->TYPE) << " :: " << t->value << std::endl;
 		}
-		for (Token *t : tokens)
-			delete t;
+
 	} catch (std::ios::failure) {
 		std::cout << "Error: ios error" << std::endl;
 		return (1);
-	} catch (Lexer::UnrecognizedCharacterException &u) {
+	} catch (CustomException &u) {
 		std::cout << u.what() << std::endl;
 		return (2);
-	} catch (Lexer::NoneAlphaCharacterException &n) {
-		std::cout << n.what() << std::endl;
-		return (3);
 	} catch (...) {
 		std::cout << "Error: Unknown error occured" << std::endl;
 		return (4);
