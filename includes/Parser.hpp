@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 17:10:37 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/03/31 23:58:09 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/04/01 16:35:21 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Type : public ASTNode {
 class Identifier : public Expression {
 	private:
 		std::string _name;
+
 	public:
 		Identifier(std::string &n) : _name(n) {}
 		// GETTER
@@ -56,8 +57,10 @@ class BinOp : public Expression {
 		Expression *_left;
 		std::string _op;
 		Expression *_right;
+
 	public:
-		BinOp(Expression *left, std::string &op, Expression *right) : _left(left), _op(op), _right(right) { }
+		BinOp(Expression *left, std::string &op, Expression *right)
+			: _left(left), _op(op), _right(right) {}
 
 		// GETTER
 		Expression *getLeft(void) { return (_left); }
@@ -68,9 +71,10 @@ class BinOp : public Expression {
 class Constant : public Expression {
 	private:
 		int _value;
+
 	public:
-		Constant(int &val) : _value(val) { }
-		//GETTER
+		Constant(int &val) : _value(val) {}
+		// GETTER
 		int getValue(void) { return (_value); }
 };
 
@@ -78,8 +82,9 @@ class Constant : public Expression {
 class Return : public Statement {
 	private:
 		Expression *_value;
+
 	public:
-		Return(Expression *val) : _value(val) { }
+		Return(Expression *val) : _value(val) {}
 
 		// GETTER
 		Expression *getValue(void) { return (_value); }
@@ -88,6 +93,7 @@ class Return : public Statement {
 class Block : public Statement {
 	private:
 		std::vector<Statement *> _functions;
+
 	public:
 		std::vector<Statement *> getFunctions(void) { return (_functions); }
 };
@@ -98,8 +104,11 @@ class Function {
 		std::string _return_type;
 		std::string _name;
 		std::vector<Statement *> _body;
+
 	public:
-		Function(std::string &rt, const std::string &n, const std::vector<Statement *> &b) : _return_type(rt), _name(n), _body(b) { }
+		Function(std::string &rt, const std::string &n,
+				 const std::vector<Statement *> &b)
+			: _return_type(rt), _name(n), _body(b) {}
 
 		// GETTER
 		std::string getReturnType(void) { return (_return_type); }
@@ -110,12 +119,13 @@ class Function {
 class Program {
 	private:
 		std::vector<Function *> _functions;
+
 	public:
 		std::vector<Function *> getFunctions(void) { return (_functions); }
+		void addFunction(Function *func);
 };
 
 #pragma endregion
-
 
 #pragma region ParserClass
 class Parser {
@@ -127,34 +137,36 @@ class Parser {
 		Token *peek(void);
 		Token *advance(void);
 		Token *previous(void);
-		bool match(enum type type);
+		bool match(enum keyword type);
 
-		bool check(enum type type);
-		void except(enum type type, const std::string &message);
+		bool check(enum keyword type);
+		void except(enum keyword type, const std::string &message);
 		bool isAtEnd(void);
 
 		// Parse fonctions
-		Program* parseProgram(void);
-		Function* parseFunction(void);
+		Program *parseProgram(void);
+		Function *parseFunction(void);
 		std::string parseType(void);
-		Statement* parseStatement(void);
-		Expression* parseExpression(void);
-		Expression* parseTerm(void);
-		Expression* parseFactor(void);
+		Statement *parseStatement(void);
+		Expression *parseExpression(void);
+		Expression *parseTerm(void);
+		Expression *parseFactor(void);
 
 	public:
-		Parser(std::vector<Token *> tokens) : _tokens(tokens) { }
+		Parser(std::vector<Token *> tokens) : _tokens(tokens) {}
 		Program *parse(void) { return (_program); };
-	
+
 		// Exceptions
 		class UnMatchedTypeException : public CustomException {
 			public:
-				UnMatchedTypeException(const std::string &msg) : CustomException(msg) {}
+				UnMatchedTypeException(const std::string &msg)
+					: CustomException(msg) {}
 		};
 
 		class EmptyBodyNotAllowedException : public CustomException {
 			public:
-				EmptyBodyNotAllowedException() : CustomException("Error: An empty body is not allowed.") { }
+				EmptyBodyNotAllowedException()
+					: CustomException("Error: An empty body is not allowed.") {}
 		};
 };
 #pragma endregion
