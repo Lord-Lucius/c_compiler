@@ -6,12 +6,13 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/01 01:35:55 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/04/02 00:24:44 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:16:17 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parser.hpp"
 #include "Lexer.hpp"
+#include "Exceptions.hpp"
 #include <cstddef>
 
 /* STARTING PARSING IN BRANCH */
@@ -27,42 +28,33 @@ Token *Parser::advance(void) {
 
 Token *Parser::previous(void) { return (_tokens[_current - 1]); }
 
-bool Parser::check(enum keyword type) {
+bool Parser::check(enum TokenType type) {
 	if (isAtEnd())
 		return (false);
 	return (peek()->TYPE == type);
 }
 
-bool Parser::match(enum keyword type) {
-	if (!check(type))
-		return (false);
-	advance();
-	return (true);
+bool Parser::match(enum TokenType type) {
+	if (check(type)) {
+		advance();
+		return (true);
+	}
+	return (false);
 }
 
-void Parser::except(enum keyword type, const std::string &message) {
-	if (!check(type))
-		throw UnMatchedTypeException(message);
-	advance();
+Token *Parser::expect(TokenType type, const std::string &message) {
+	if (check(type))
+		return advance();
+	throw UnexpectedTokenException(message);
 }
 
 bool Parser::isAtEnd(void) { return (_current == _tokens.size()); }
 
 // Parse function part
 Program *Parser::parseProgram(void) {
-	_program = new Program();
+	Program *p = new Program();
 	while (!isAtEnd()) {
-		_program->addFunction(parseFunction());
+		p->addFunction(parseFunction());
 	}
-	return (_program);
+	return (p);
 }
-
-Function *Parser::parseFunction(void) {
-	if (check(TOKEN_KEYWORD)) {
-		except(TOKEN_KEYWORD, "Wrong keyword");
-	}
-	return nullptr;
-}
-
-// Program
-void Program::addFunction(Function *func) { _functions.push_back(func); }

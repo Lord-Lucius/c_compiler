@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:51:48 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/04/04 19:20:59 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/04/07 23:05:55 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include <optional>
 #include <string>
 #include <vector>
-
-#include "main.hpp"
 
 enum class Keyword { RETURN, IF, ELSE, WHILE, FOR, VOID, INT, FLOAT, CHAR, STATIC };
 
@@ -76,7 +74,7 @@ class Lexer {
 		std::vector<Token *> getTokens(void);
 
 		// Exception
-		class NoneAlphaCharacterException : public CustomException {
+/*		class NoneAlphaCharacterException : public CustomException {
 			public:
 				NoneAlphaCharacterException()
 					: CustomException("First character is not alpha") {}
@@ -91,7 +89,7 @@ class Lexer {
 		class EmptyFileException : public CustomException {
 			public:
 				EmptyFileException() : CustomException("Empty file detected") {}
-		};
+		};*/
 };
 
 // DEBUG
