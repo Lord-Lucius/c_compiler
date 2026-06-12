@@ -1,353 +1,85 @@
-# 🔨 C Compiler
+# 📚 Documentation — C Compiler
 
-**Building a fully functional C compiler from scratch in C++**
-
-> *"In the end, we only regret the chances we didn't take." — Musashi Miyamoto*
-
----
-
-## 📋 Overview
-
-This project implements a **complete C compiler** following the principles outlined in *Writing a C Compiler*. Starting from raw source code, the compiler produces executable x86-64 machine code through a series of well-defined phases.
-
-**Language:** C++  
-**Status:** 🚀 In Progress
-**Difficulty:** ⭐⭐⭐⭐⭐ (Expert)
+> Documentation complète du projet, organisée pour reprendre le travail
+> après une pause prolongée.
 
 ---
 
-## 🎯 Project Goals
+## 🗺️ Plan de lecture conseillé
 
-- ✅ Lexical analysis (tokenization)
-- ✅ Parsing (syntax analysis → AST)
-- ✅ Semantic analysis (type checking, validation)
-- ✅ Code generation (x86-64 assembly)
-- ✅ Optimization techniques
-- ✅ Unit testing per phase
-- 🔄 Handle edge cases & error reporting
+Si tu reprends le projet maintenant, lis dans cet ordre :
 
----
+1. **`01_RECAP_ETAT_PROJET.md`** ← commence ici
+   État réel du code, écart avec la doc passée, ce qui marche / ce qui
+   ne marche pas.
 
-## 🏗️ Compiler Phases
+2. **`02_ROADMAP.md`**
+   Plan détaillé de ce qui reste à coder, étape par étape, avec
+   dépendances claires.
 
-### Phase 1️⃣: **Lexical Analysis (Lexer)**
-Converts raw source code into _tokens.
+3. **`03_PORTABILITE_MAC_LINUX.md`**
+   Comment garantir que le compilateur marche sur Mac et Linux,
+   spécialement le piège du codegen + Apple Silicon.
 
-```
-Input:  int main() { return 42; }
-Output: [INT] [IDENT:main] [LPAREN] [RPAREN] [LBRACE] 
-        [RETURN] [INT:42] [SEMICOLON] [RBRACE]
-```
+4. **`tests/00_STRATEGIE.md`**
+   Pourquoi des tests unitaires, choix de framework (doctest),
+   organisation des tests.
 
-**Key Tasks:**
-- Tokenization with lookahead
-- Whitespace & comment handling
-- String literal parsing
-- Keyword recognition
+5. **`tests/04_INTEGRATION_CMAKE.md`**
+   Comment brancher doctest dans le projet (setup technique).
 
-### Phase 2️⃣: **Syntax Analysis (Parser)**
-Builds an Abstract Syntax Tree (AST) from _tokens.
+6. **`tests/01_TESTS_LEXER.md`**
+   Liste complète des tests Lexer à écrire (~50 tests).
 
-```
-_tokens → Parser → AST
-         ↓
-    Grammar Rules
-    Recursive Descent
-```
-
-**Key Tasks:**
-- Recursive descent parsing
-- Precedence handling
-- Error recovery
-- AST node construction
-
-### Phase 3️⃣: **Semantic Analysis**
-Validates the AST and gathers semantic information.
-
-**Key Tasks:**
-- Type checking
-- Symbol table management
-- Scope resolution
-- Variable declaration tracking
-- Function signature validation
-
-### Phase 4️⃣: **Code Generation (Codegen)**
-Transforms AST into x86-64 assembly.
-
-```
-AST → Code Generator → Assembly
-                    ↓
-                x86-64 Instructions
-                Stack Management
-                Register Allocation
-```
-
-**Key Tasks:**
-- Instruction selection
-- Register allocation
-- Stack frame management
-- Function prologue/epilogue
-- Call convention handling
-
-### Phase 5️⃣: **Assembly & Linking**
-Produces final executable.
-
-```
-Assembly → Assembler (as) → Object File (.o)
-                         ↓
-                      Linker (ld) → Executable
-```
+7. **`tests/02_TESTS_PARSER.md`**
+   Liste complète des tests Parser, organisée par phase
+   d'implémentation (~80 tests).
 
 ---
 
-## 🛠️ Architecture
+## 📂 Arborescence
 
-### 📁 Project Structure
 ```
-TODO
+docs/
+├── README.md                          ← ce fichier
+├── 01_RECAP_ETAT_PROJET.md            ← état actuel (audit honnête)
+├── 02_ROADMAP.md                      ← ce qu'il reste à faire
+├── 03_PORTABILITE_MAC_LINUX.md        ← Mac, Linux, Apple Silicon
+└── tests/
+    ├── 00_STRATEGIE.md                ← stratégie de tests + doctest
+    ├── 01_TESTS_LEXER.md              ← tests Lexer détaillés
+    ├── 02_TESTS_PARSER.md             ← tests Parser détaillés
+    └── 04_INTEGRATION_CMAKE.md        ← setup technique CMake + doctest
 ```
 
-### 🔄 Data Flow
-```
-C Source Code
-     ↓
-  ┌─────────────────────┐
-  │   LEXICAL ANALYSIS  │
-  │   (Lexer)          │
-  └────────┬────────────┘
-           ↓
-      Token Stream
-           ↓
-  ┌─────────────────────┐
-  │  SYNTAX ANALYSIS    │
-  │   (Parser)         │
-  └────────┬────────────┘
-           ↓
-    Abstract Syntax Tree
-           ↓
-  ┌─────────────────────┐
-  │ SEMANTIC ANALYSIS   │
-  │  (Type Checking)   │
-  └────────┬────────────┘
-           ↓
-   Validated AST
-           ↓
-  ┌─────────────────────┐
-  │  CODE GENERATION    │
-  │  (x86-64 Codegen)  │
-  └────────┬────────────┘
-           ↓
-    Assembly Code (.s)
-           ↓
-  ┌─────────────────────┐
-  │ ASSEMBLY & LINKING  │
-  │  (as, ld)          │
-  └────────┬────────────┘
-           ↓
-      Executable Binary
-```
+> `03_TESTS_AVANCES.md` à créer plus tard (semantic + codegen).
 
 ---
 
-## 🚀 How to Use
+## ⚡ TL;DR
 
-### Compilation
-```bash
-# Build the compiler
-make
+- **Lexer** : ✅ fonctionnel, aucun test unitaire.
+- **Parser** : ⚠️ 15% squelette, classes manquantes, bugs de types
+  (`enum keyword` n'existe pas), méthode `parse()` qui ne lance jamais
+  `parseProgram()`.
+- **Tests** : ❌ aucun test unitaire dans le projet.
 
-# Clean object files
-make clean
-
-# Full rebuild
-make re
-```
-
-### Using the Compiler
-```bash
-# Compile a C file
-./c_compiler input.c -o output
-
-# Run the output
-./output
-
-# Verbose mode (see assembly)
-./c_compiler input.c -o output -S
-```
-
-### Example Program
-```c
-// simple.c
-int main(void) {
-    int x = 5;
-    int y = 10;
-    return x + y;
-}
-```
-
-```bash
-$ ./c_compiler simple.c -o simple
-$ ./simple
-$ echo $?  # Output: 15
-```
+**Prochaine action** :
+1. Mettre en place doctest (voir `tests/04_INTEGRATION_CMAKE.md`).
+2. Écrire les tests Lexer (voir `tests/01_TESTS_LEXER.md`).
+3. Refactor Parser.hpp (voir `02_ROADMAP.md` étape A).
+4. Implémenter Parser phase par phase avec tests TDD.
 
 ---
 
-## 💡 Features Implemented
+## 🔄 Mise à jour des docs
 
-### ✅ Supported C Features
-- [x] Integer types (int, char, long)
-- [x] Arithmetic operators (+, -, *, /, %)
-- [x] Comparison operators (<, >, ==, !=, <=, >=)
-- [x] Logical operators (&&, ||, !)
-- [x] Variable declarations & assignments
-- [x] Function declarations & definitions
-- [x] Function calls & return statements
-- [x] if/else conditionals
-- [x] while loops
-- [x] for loops
-- [x] break/continue statements
-- [x] Block scoping
-- [x] Comments (// and /* */)
+Quand tu avances dans le projet, **mets à jour** :
 
-### 🔄 In Progress
-- [ ] Arrays
-- [ ] Pointers
-- [ ] Structs
-- [ ] Bitwise operators
-- [ ] Switch statements
-- [ ] Ternary operator
+- `01_RECAP_ETAT_PROJET.md` : à chaque grosse étape franchie, modifie
+  le tableau de statut en haut.
+- `README.md` (à la racine du projet) : la barre de progression actuelle
+  ment (annonce Parser 100% et Codegen 40%). À ajuster à la réalité.
 
-### 📋 Not Yet Implemented
-- [ ] Floating point types
-- [ ] String literals (proper support)
-- [ ] Preprocessor directives
-- [ ] Macros
-- [ ] Unions
-- [ ] Enums
-
----
-
-### Common Issues & Solutions
-
-| Issue | Solution |
-|-------|----------|
-| Segfault in parser | Check token lookahead bounds |
-| Type mismatch error | Verify symbol table scope |
-| Wrong assembly output | Debug codegen with `--print-asm` |
-| Linker errors | Ensure function declarations |
-
----
-
-## 📚 Resources & References
-
-### The Bible
-- **Writing a C Compiler** — Jack Crenshaw
-- **Crafting Interpreters** — Robert Nystrom
-- **Dragon Book** — Aho, Lam, Sethi, Ullman
-
-### Standards
-- **C11 Standard** — ISO/IEC 9899:2011
-- **x86-64 ABI** — System V AMD64 calling convention
-- **GCC Assembly Syntax** — AT&T format
-
-### Tools
-```bash
-# Disassemble generated code
-objdump -d output
-
-# Check assembly syntax
-as -o test.o test.s
-
-# Link object files
-ld -o executable test.o
-```
-
----
-
-## 🛠️ Tech Stack
-
-![C++](https://img.shields.io/badge/-C%2B%2B-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
-![GCC](https://img.shields.io/badge/-GCC-A42E2B?style=flat-square&logo=gcc&logoColor=white)
-![GDB](https://img.shields.io/badge/-GDB-FF6B6B?style=flat-square&logoColor=white)
-![Make](https://img.shields.io/badge/-Make-427819?style=flat-square&logoColor=white)
-![x86-64](https://img.shields.io/badge/-x86--64-FF6B00?style=flat-square&logoColor=white)
-
----
-
-## 💻 Sample Output
-
-### Input Program
-```c
-int factorial(int n) {
-    if (n <= 1) {
-        return 1;
-    }
-    return n * factorial(n - 1);
-}
-
-int main(void) {
-    return factorial(5);
-}
-```
-
-### Generated Assembly (excerpt)
-```asm
-.globl factorial
-factorial:
-    push %rbp
-    mov %rsp, %rbp
-    sub $16, %rsp
-    mov %rdi, -8(%rbp)      # n = rdi
-    
-    mov -8(%rbp), %rax
-    cmp $1, %rax
-    jg .L1
-    
-    mov $1, %rax
-    jmp .L2
-    
-.L1:
-    mov -8(%rbp), %rax
-    sub $1, %rax
-    mov %rax, %rdi
-    call factorial
-    mov -8(%rbp), %rbx
-    imul %rbx, %rax
-    
-.L2:
-    leave
-    ret
-```
-
-### Execution
-```bash
-$ ./c_compiler factorial.c -o factorial
-$ ./factorial
-$ echo $?  # Output: 120 (5! = 120)
-```
-
----
-
-## 🎓 Progress Tracker
-
-```
-Lexer:        ████████████████████ 100% ✅
-Parser:       ████████████████████ 100% ✅
-Semantic:     ██████████░░░░░░░░░░  50% 🔄
-Codegen:      ████████░░░░░░░░░░░░  40% 🔄
-Optimization: ░░░░░░░░░░░░░░░░░░░░   0% 📋
-```
-
----
-
-## 📞 References
-
-- Lexer inspiration: [Crafting Interpreters](https://craftinginterpreters.com/)
-- Parser design: [Recursive Descent Parsing](https://en.wikibooks.org/wiki/Compiler_Construction)
-- x86-64: [System V AMD64 ABI](https://www.uclibc.org/docs/psABI-x86_64.pdf)
-- GCC internals: [GCC Development](https://gcc.gnu.org/develop.html)
-
----
-
-**Made in my personnal cave**
+> Une doc à jour est plus utile qu'une doc parfaite. Si tu fais une grosse
+> modif, prends 5 minutes pour ajuster les docs concernées.

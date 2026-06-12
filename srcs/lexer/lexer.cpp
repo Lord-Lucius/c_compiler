@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/24 18:49:31 by luluzuri          #+#    #+#             */
-/*   Updated: 2026/04/04 19:23:56 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/06/12 11:09:09 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ char Lexer::advance_cursor(void) {
 char Lexer::peek(int offset) {
 	if (_cursor + offset < _size)
 		return (_source[_cursor + offset]);
-	else
-		return ('\0');
+	return ('\0');
 }
 
 void Lexer::checkAndSkip(void) {
@@ -93,7 +92,7 @@ bool Lexer::tokenizeKeyword(const std::string &word) {
 bool Lexer::tokenizeIdentifier(const std::string &word) {
 	if (word.empty())
 		return (false);
-	
+
 	if (!std::isalpha(word[0]) && word[0] != '_')
 		return (false);
 
@@ -375,13 +374,13 @@ std::vector<Token *> &Lexer::tokenize() {
 
 	while (_cursor < _size && notEof) {
 		checkAndSkip();
-		
+
 		if (_current == '\0')  // ✅ AJOUTER CETTE VÉRIFICATION
 			break;
 
 		word.clear();
 		word = createWord();
-		
+
 		if (word.empty())  // ✅ AJOUTER CETTE VÉRIFICATION
 			break;
 

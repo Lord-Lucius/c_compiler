@@ -65,7 +65,7 @@ show_help() {
 # Function to clean
 do_clean() {
     print_info "Cleaning build directory..."
-    
+
     if [ -d "$BUILD_DIR" ]; then
         rm -rf "$BUILD_DIR"
         print_success "Build directory cleaned"
@@ -77,24 +77,24 @@ do_clean() {
 # Function to build
 do_build() {
     print_info "Building project..."
-    
+
     # Check if build directory exists, if not create it
     if [ ! -d "$BUILD_DIR" ]; then
         print_info "Creating build directory..."
         mkdir -p "$BUILD_DIR"
     fi
-    
+
     # Go to build directory
     cd "$BUILD_DIR" || exit 1
-    
+
     # Run CMake
     print_info "Running CMake..."
-    if ! cmake ..; then
+    if ! cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..; then
         print_error "CMake configuration failed"
         cd "$SCRIPT_DIR" || exit 1
         return 1
     fi
-    
+
     # Run make
     print_info "Compiling..."
     if ! make; then
@@ -102,10 +102,10 @@ do_build() {
         cd "$SCRIPT_DIR" || exit 1
         return 1
     fi
-    
+
     # Go back to script directory
     cd "$SCRIPT_DIR" || exit 1
-    
+
     print_success "Build completed successfully!"
     echo ""
     echo -e "${GREEN}Executable location: ${YELLOW}./build/c_compiler${NC}"
@@ -116,7 +116,7 @@ do_build() {
 do_rebuild() {
     print_info "Rebuilding project (clean + build)..."
     echo ""
-    
+
     do_clean
     echo ""
     do_build
@@ -125,17 +125,17 @@ do_rebuild() {
 # Function to run tests
 run_tests() {
     print_info "Running tests..."
-    
+
     if [ ! -f "$BUILD_DIR/c_compiler" ]; then
         print_error "Executable not found. Build the project first!"
         return 1
     fi
-    
+
     if [ ! -d "$SCRIPT_DIR/writing-a-c-compiler-tests" ]; then
         print_error "Test directory not found"
         return 1
     fi
-    
+
     cd "$SCRIPT_DIR/writing-a-c-compiler-tests" || exit 1
     ./test_compiler ../build/c_compiler --chapter 1 --stage lex
     cd "$SCRIPT_DIR" || exit 1
