@@ -6,7 +6,7 @@
 /*   By: luluzuri <luluzuri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 11:15:52 by lucius            #+#    #+#             */
-/*   Updated: 2026/04/02 00:34:22 by luluzuri         ###   ########.fr       */
+/*   Updated: 2026/06/12 11:35:12 by luluzuri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int main(int ac, char *av[]) {
 			std::cout << tokenTypeToString(t->TYPE) << " :: " << t->value << std::endl;
 		}
 
-	} catch (std::ios::failure) {
+	} catch (std::ios::failure &) {
 		std::cout << "Error: ios error" << std::endl;
 		return (1);
 	} catch (CustomException &u) {

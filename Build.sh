@@ -89,7 +89,7 @@ do_build() {
 
     # Run CMake
     print_info "Running CMake..."
-    if ! cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..; then
+    if ! cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++; then
         print_error "CMake configuration failed"
         cd "$SCRIPT_DIR" || exit 1
         return 1
